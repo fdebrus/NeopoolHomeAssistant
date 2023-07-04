@@ -1,0 +1,154 @@
+title: PoolWatch
+views:
+  - title: Pool
+    panel: false
+    icon: mdi:pool
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                entity: sensor.smartpool_neopool_temperature
+                min: 17
+                max: 35
+                name: Temperature
+                needle: true
+                severity:
+                  green: 25
+                  yellow: 22
+                  red: 30
+              - type: gauge
+                entity: sensor.smartpool_neopool_ph_data
+                needle: true
+                min: 6.4
+                max: 8
+                segments:
+                  - from: 1
+                    color: '#db4437'
+                  - from: 6.8
+                    color: '#ffa600'
+                  - from: 7
+                    color: '#43a047'
+                  - from: 7.4
+                    color: '#ffa600'
+                  - from: 7.6
+                    color: '#db4437'
+                name: pH
+              - type: gauge
+                entity: sensor.smartpool_neopool_redox_data
+                needle: true
+                min: 500
+                max: 900
+                segments:
+                  - from: 1
+                    color: '#db4437'
+                  - from: 600
+                    color: '#ffa600'
+                  - from: 650
+                    color: '#43a047'
+                  - from: 750
+                    color: '#ffa600'
+                  - from: 800
+                    color: '#db4437'
+                name: RedOX
+          - type: horizontal-stack
+            cards:
+              - graph: line
+                type: sensor
+                entity: sensor.smartpool_neopool_temperature
+                detail: 1
+                name: Temperature
+                icon: mdi:pool-thermometer
+              - graph: line
+                type: sensor
+                entity: sensor.smartpool_neopool_ph_data
+                detail: 1
+                name: pH
+                icon: mdi:pool
+              - graph: line
+                type: sensor
+                entity: sensor.smartpool_neopool_redox_data
+                detail: 1
+                name: RedOX
+                icon: mdi:pool
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: input_number.set_smartpool_redox
+                  - entity: input_number.set_smartpool_hydrolysis
+                title: RedOX
+              - type: entities
+                entities:
+                  - entity: input_number.set_smartpool_phmin
+                  - entity: input_number.set_smartpool_phmax
+                title: pH
+      - title: Pool Settings
+        entities:
+          - label: Pool
+            type: section
+          - entity: switch.pool_pump_switch
+            name: Pump Manual
+          - entity: select.pool_pump_mode
+            name: Mode
+          - entity: select.pool_pump_speed
+            name: Speed
+        type: entities
+        show_header_toggle: false
+        theme: default
+      - type: entities
+        entities:
+          - entity: switch.pool_lights
+            name: Lights
+          - entity: cover.volet_piscine
+            name: Shutter
+  - badges:
+      - sun.sun
+      - sensor.time
+      - sensor.cycle_pool
+      - input_number.out_of_order
+    title: Advanced
+    icon: mdi:settings
+    cards:
+      - type: horizontal-stack
+        cards:
+          - icon_height: 64px
+            type: entity-button
+            tap_action:
+              action: none
+            entity: input_number.out_of_order
+            show_name: true
+            name: Maintenance
+            show_icon: true
+            hold_action:
+              action: more-info
+          - icon_height: 64px
+            type: entity-button
+            tap_action:
+              action: more-info
+            entity: input_datetime.cummulated_flow_start
+            show_name: true
+            name: Reset Cumm. Flow
+            show_icon: true
+            hold_action:
+              action: call-service
+              service: automation.trigger
+              service_data:
+                entity_id: automation.reset_cummulated_flow_start
+          - icon_height: 64px
+            type: entity-button
+            tap_action:
+              action: none
+            entity: input_number.pump_on_for
+            show_name: true
+            name: Filter for ...
+            show_icon: true
+            hold_action:
+              action: more-info
+      - entities:
+          - entity: input_datetime.cummulated_flow_start
+          - entity: sensor.cummulated_flow_high
+          - entity: sensor.cummulated_flow_low
+        type: entities
