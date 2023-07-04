@@ -1,0 +1,89 @@
+input_number:
+  set_smartpool_phmin:
+    name: pHMin
+    initial: 7.0
+    min: 0
+    max: 14
+    step: 0.1
+    mode: slider
+  set_smartpool_phmax:
+    name: pHMax
+    initial: 8.0
+    min: 0
+    max: 14
+    step: 0.1
+    mode: slider
+  set_smartpool_redox:
+    name: Redox
+    initial: 700
+    min: 300
+    max: 800
+    step: 5
+    mode: slider
+  set_smartpool_hydrolysis:
+    name: Hydrolysis
+    initial: 10
+    min: 0
+    max: 30
+    step: 1
+    mode: slider
+
+mqtt:
+  switch:
+    - unique_id: "pool_pump_switch"
+      name: "Pool Pump Switch"
+      device_class: switch
+      command_topic: "cmnd/SmartPool/NPFiltration"
+      state_topic: "stat/SmartPool/NPFILTRATION"
+      value_template:  >- 
+        {% set values = { 'OFF':'0', 'ON':'1' } %}
+        {{ values[value_json["NPFiltration"]] if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '99' }}
+      payload_on: "1"
+      payload_off: "0"
+
+    - unique_id: "pool_lights"
+      name: "Pool Lights"
+      device_class: switch
+      command_topic: "cmnd/SmartPool/NPLight"
+      state_topic: "stat/SmartPool/NPLIGHT"
+      value_template: >- 
+        {% set values = { 'OFF':'0', 'ON':'1' } %}
+        {{ values[value_json["NPLight"]] if value_json["NPLight"] in values.keys() else '99' }}
+      payload_on: "1"
+      payload_off: "0"
+
+  select:
+    - unique_id: "pool_pump_mode"
+      name: "Pool Pump Mode"
+      command_topic: "cmnd/SmartPool/NPFiltrationMode"
+      state_topic: "stat/SmartPool/NPFILTRATIONMODE"
+      command_template: >- 
+        {% set values = { 'Manual':'0', 'Auto':'1', 'Heating':'2', 'Smart':'3', 'Intelligent':'4' } %}
+        {{ values[value] if value in values.keys() else '99' }}
+      value_template: >-
+        {% if value_json.NPFiltrationmode == '' %}
+          Intelligent
+        {%- else -%}
+          {{ value_json.NPFiltrationmode }}
+        {%- endif -%}
+      options:
+        - Manual
+        - Auto
+        - Heating
+        - Smart
+        - Intelligent
+
+    - unique_id: "pool_pump_speed"
+      name: "Pool Pump Speed"
+      command_topic: "cmnd/SmartPool/NPFiltration"
+      state_topic: "stat/SmartPool/NPFILTRATION"
+      command_template: >-
+        {% set values = { 'Slow':'1', 'Medium':'2', 'Fast':'3' } %}
+        {{ states('switch.pool_pump_switch') + ' ' + values[value] if value in values.keys() else '99' }}
+      value_template: >-
+        {% set values = { '1':'Slow', '2':'Medium', '3':'Fast' } %}
+        {{ values[value_json["Speed"]] if value_json["Speed"] in values.keys() else '99' }}
+      options:
+        - Slow
+        - Medium
+        - Fast
