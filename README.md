@@ -1,10 +1,10 @@
 # NeopoolHomeAssistant
 
-Currently tested with Hayward Aquarite+ 
+WIP, Currently tested with Hayward Aquarite+ 
 
 **Dependencies**
 
-Install and configure the Neopool for Tasmota, how to is here https://tasmota.github.io/docs/NeoPool/
+Install and configure the Neopool for Tasmota, how to https://tasmota.github.io/docs/NeoPool/
 
 Configure MQTT to connect the Tasmota module to HomeAssistant.
 
