@@ -1,0 +1,56 @@
+alias: Helper_Hydrolysis
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - input_number.set_smartpool_hydrolysis
+condition: []
+action:
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPHydrolysis
+      payload_template: "{{ states('input_number.set_smartpool_hydrolysis') }}"
+mode: single
+
+alias: Helper_pHMax
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - input_number.set_smartpool_phmax
+condition: []
+action:
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPpHMax
+      payload_template: "{{ states('input_number.set_smartpool_phmax') }}"
+mode: single
+
+alias: Helper_pHMin
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - input_number.set_smartpool_phmin
+condition: []
+action:
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPpHMin
+      payload_template: "{{ states('input_number.set_smartpool_phmin') }}"
+mode: single
+
+
+alias: Helper_RedOX
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - input_number.set_smartpool_redox
+condition: []
+action:
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPRedox
+      payload_template: "{{ states('input_number.set_smartpool_redox') }}"
+mode: single
