@@ -35,9 +35,18 @@ mqtt:
       device_class: switch
       command_topic: "cmnd/SmartPool/NPFiltration"
       state_topic: "stat/SmartPool/NPFILTRATION"
+#      command_template: >- 
+#        {% set values = { 'OFF':'0', 'ON':'1' } %}
+#        {% if is_state('pool_pump_speed', 'Slow') %}
+#          {{ values[value_json["NPFiltration"]] + ' 1' if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '0' }}
+#        {% elif is_state('pool_pump_speed', 'Medium') %}
+#          {{ values[value_json["NPFiltration"]] + ' 2' if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '0' }}
+#        {% elif is_state('pool_pump_speed', 'Fast') %}  
+#          {{ values[value_json["NPFiltration"]] + ' 3' if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '0' }}
+#        {% endif %}
       value_template:  >- 
         {% set values = { 'OFF':'0', 'ON':'1' } %}
-        {{ values[value_json["NPFiltration"]] if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '99' }}
+        {{ values[value_json["NPFiltration"]] if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '0' }}
       payload_on: "1"
       payload_off: "0"
 
@@ -79,7 +88,11 @@ mqtt:
       state_topic: "stat/SmartPool/NPFILTRATION"
       command_template: >-
         {% set values = { 'Slow':'1', 'Medium':'2', 'Fast':'3' } %}
-        {{ states('switch.pool_pump_switch') + ' ' + values[value] if value in values.keys() else '99' }}
+        {% if is_state('switch.pool_pump_switch', 'on') %}
+          {{ '1 ' + values[value] if value in values.keys() else '99' }}
+        {% elif is_state('switch.pool_pump_switch', 'off') %}
+          {{ '0 ' + values[value] if value in values.keys() else '99' }}
+        {% endif %}
       value_template: >-
         {% set values = { '1':'Slow', '2':'Medium', '3':'Fast' } %}
         {{ values[value_json["Speed"]] if value_json["Speed"] in values.keys() else '99' }}
@@ -87,3 +100,4 @@ mqtt:
         - Slow
         - Medium
         - Fast
+
