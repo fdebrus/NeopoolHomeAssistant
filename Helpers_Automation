@@ -1,32 +1,62 @@
-alias: Helper_Hydrolysis
+alias: SmartPool_Sensors_Updated
 description: ""
 trigger:
-  - platform: state
-    entity_id:
-      - input_number.set_smartpool_hydrolysis
+  - platform: mqtt
+    topic: tele/SmartPool/SENSOR
 condition: []
 action:
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPFiltrationmode
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPFiltration
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPLight
   - service: mqtt.publish
     data:
       topic: cmnd/SmartPool/NPHydrolysis
-      payload_template: "{{ states('input_number.set_smartpool_hydrolysis') }}"
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPpHMax
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPpHMin
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPRedox
 mode: single
 
-alias: Helper_pHMax
+alias: SmartPool_Helper_RedOX_Set
 description: ""
 trigger:
   - platform: state
     entity_id:
-      - input_number.set_smartpool_phmax
+      - input_number.set_smartpool_redox
 condition: []
 action:
   - service: mqtt.publish
     data:
-      topic: cmnd/SmartPool/NPpHMax
-      payload_template: "{{ states('input_number.set_smartpool_phmax') }}"
+      topic: cmnd/SmartPool/NPRedox
+      payload_template: "{{ states('input_number.set_smartpool_redox') }}"
 mode: single
 
-alias: Helper_pHMin
+alias: SmartPool_Helper_RedOX_Read
+description: ""
+trigger:
+  - platform: mqtt
+    topic: stat/SmartPool/NPREDOX
+condition: []
+action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.set_smartpool_redox
+    data:
+      value: "{{ trigger.payload_json.NPRedox | float }}"
+mode: single
+
+alias: SmartPool_Helper_pHMin_Set
 description: ""
 trigger:
   - platform: state
@@ -40,17 +70,72 @@ action:
       payload_template: "{{ states('input_number.set_smartpool_phmin') }}"
 mode: single
 
+alias: SmartPool_Helper_pHMIN_Read
+description: ""
+trigger:
+  - platform: mqtt
+    topic: stat/SmartPool/NPPHMIN
+condition: []
+action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.set_smartpool_phmin
+    data:
+      value: "{{ trigger.payload_json.NPpHMIN | float }}"
+mode: single
 
-alias: Helper_RedOX
+alias: SmartPool_Helper_pHMax_Set
 description: ""
 trigger:
   - platform: state
     entity_id:
-      - input_number.set_smartpool_redox
+      - input_number.set_smartpool_phmax
 condition: []
 action:
   - service: mqtt.publish
     data:
-      topic: cmnd/SmartPool/NPRedox
-      payload_template: "{{ states('input_number.set_smartpool_redox') }}"
+      topic: cmnd/SmartPool/NPpHMax
+      payload_template: "{{ states('input_number.set_smartpool_phmax') }}"
+mode: single
+
+alias: SmartPool_Helper_pHMAX_Read
+description: ""
+trigger:
+  - platform: mqtt
+    topic: stat/SmartPool/NPPHMAX
+condition: []
+action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.set_smartpool_phmax
+    data:
+      value: "{{ trigger.payload_json.NPpHMAX | float }}"
+mode: single
+
+alias: SmartPool_Helper_Hydrolysis_Set
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - input_number.set_smartpool_hydrolysis
+condition: []
+action:
+  - service: mqtt.publish
+    data:
+      topic: cmnd/SmartPool/NPHydrolysis
+      payload_template: "{{ states('input_number.set_smartpool_hydrolysis') }}"
+mode: single
+
+alias: SmartPool_Helper_Hydrolysis_Read
+description: ""
+trigger:
+  - platform: mqtt
+    topic: stat/SmartPool/NPHYDROLYSIS
+condition: []
+action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.set_smartpool_hydrolysis
+    data:
+      value: "{{ trigger.payload_json.NPHydrolysis | float }}"
 mode: single
