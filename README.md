@@ -10,8 +10,7 @@ WIP, Currently tested with Hayward Aquarite+
 
 4- Install your dashboard (smartpool_dashboard)
 
-![image](https://github.com/fdebrus/NeopoolHomeAssistant/assets/33791533/b2454feb-d12f-4e0d-af09-894d0c0b265e)
-
+![image](https://github.com/fdebrus/NeopoolHomeAssistant/assets/33791533/6f6e29f2-3704-495c-bfde-9b4ceeab6e8e)
 
 **Dependencies**
 
