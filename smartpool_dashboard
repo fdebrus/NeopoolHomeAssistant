@@ -1,4 +1,4 @@
-title: PoolWatch
+title: SmartPool
 views:
   - title: Pool
     panel: false
@@ -87,7 +87,7 @@ views:
                 title: pH
       - title: Pool Settings
         entities:
-          - label: Pool
+          - label: Pump
             type: section
           - entity: switch.pool_pump_switch
             name: Pump Manual
@@ -95,12 +95,43 @@ views:
             name: Mode
           - entity: select.pool_pump_speed
             name: Speed
+          - label: Accessories
+            type: section
+          - entity: switch.pool_lights
+          - entity: cover.volet_piscine
         type: entities
         show_header_toggle: false
         theme: default
-      - type: entities
-        entities:
-          - entity: switch.pool_lights
-            name: Lights
-          - entity: cover.volet_piscine
-            name: Shutter
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            entities:
+              - label: Filtration
+                type: section
+              - entity: sensor.pump_state
+                icon: mdi:pump
+              - entity: sensor.pump_mode
+                icon: mdi:auto-mode
+              - entity: sensor.pump_speed
+                icon: mdi:speedometer
+              - entity: sensor.heating
+                icon: mdi:heat-pump
+                name: Heatpump
+              - label: Hydrolysis
+                type: section
+              - entity: sensor.hydrolysis_state
+                name: State
+                icon: mdi:pool
+              - entity: sensor.hydrolysis_production
+                name: Production
+                icon: mdi:arrow-expand-all
+              - entity: sensor.hydrolysis_low
+                icon: mdi:alarm-light
+                name: Production Low Alarm
+              - entity: sensor.hydrolysis_boost
+                name: Boost
+                icon: mdi:arrow-top-right-thin-circle-outline
+              - entity: sensor.hydrolysis_cover
+                name: Cover
+                icon: mdi:window-shutter
+            title: Current States
