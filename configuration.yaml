@@ -91,4 +91,101 @@ mqtt:
         - Slow
         - Medium
         - Fast
+        
+  - platform: template
+    sensors:
+      pump_mode:
+        friendly_name: "Mode"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_filtration_mode', '0') %}
+            Manual
+          {% elif is_state('sensor.smartpool_neopool_filtration_mode', '1') %}
+            Auto
+          {% elif is_state('sensor.smartpool_neopool_filtration_mode', '2') %}
+            Heating
+          {% elif is_state('sensor.smartpool_neopool_filtration_mode', '3') %}
+            Smart
+          {% elif is_state('sensor.smartpool_neopool_filtration_mode', '4') %}
+            Intelligent
+          {% elif is_state('sensor.smartpool_neopool_filtration_mode', '13') %}
+            Backwash
+          {% endif %}
 
+      pump_state:
+        friendly_name: "State"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_filtration_state', '0') %}
+            Off
+          {% elif is_state('sensor.smartpool_neopool_filtration_state', '1') %}
+            On
+          {% endif %}
+
+      pump_speed:
+        friendly_name: "Speed"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_filtration_speed', '1') %}
+            Slow
+          {% elif is_state('sensor.smartpool_neopool_filtration_speed', '2') %}
+            Medium
+          {% elif is_state('sensor.smartpool_neopool_filtration_speed', '3') %}
+            Fast
+          {% endif %}
+
+      heating:
+        friendly_name: "Pool Heatpump"
+        value_template: >- 
+          {% if '1' in states('sensor.smartpool_neopool_relay_aux').split(",")[3].split("]")[0] %}                
+            On
+          {% else %}
+            Off
+          {% endif %}
+
+      hydrolysis_boost:
+        friendly_name: "Shock"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_hydrolysis_boost', '0') %}
+            Off
+          {% elif is_state('sensor.smartpool_neopool_hydrolysis_boost', '1') %}
+            On
+          {% else %}
+            state.sensor.smartpool_neopool_hydrolysis_boost
+          {% endif %}
+
+      hydrolysis_cover:
+        friendly_name: "Cover"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_hydrolysis_cover', '0') %}
+            Off
+          {% elif is_state('sensor.smartpool_neopool_hydrolysis_cover', '1') %}
+            On
+          {% else %}
+            state.sensor.smartpool_neopool_hydrolysis_cover
+          {% endif %}
+
+      hydrolysis_low:
+        friendly_name: "Low Alarm"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_hydrolysis_low', '0') %}
+            Off
+          {% elif is_state('sensor.smartpool_neopool_hydrolysis_low', '1') %}
+            On
+          {% else %}
+            state.sensor.smartpool_neopool_hydrolysis_low
+          {% endif %}
+
+      hydrolysis_production:
+        friendly_name: "Production"
+        value_template: "{{ states('sensor.smartpool_neopool_hydrolysis_data') + ' ' + states('sensor.smartpool_neopool_hydrolysis_unit') }}"
+
+      hydrolysis_state:
+        friendly_name: "State"
+        value_template: >-
+          {% if is_state('sensor.smartpool_neopool_hydrolysis_state', 'Pol1') %}
+            Polarity 1
+          {% elif is_state('sensor.smartpool_neopool_hydrolysis_state', 'Pol2') %}
+            Polarity 2
+          {% elif is_state('sensor.smartpool_neopool_hydrolysis_state', 'Flow') %}
+            No water flow
+          {% else %}
+            Off
+          {% endif %}
