@@ -37,7 +37,7 @@ mqtt:
       state_topic: "stat/SmartPool/NPFILTRATION"
       value_template:  >- 
         {% set values = { 'OFF':'0', 'ON':'1' } %}
-        {{ values[value_json["NPFiltration"]] if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '0' }}
+        {{ values[value_json["NPFiltration"]] if value_json["NPFiltration"] in values.keys() and states('select.pool_pump_mode') == 'Manual' else '' }}
       payload_on: "1"
       payload_off: "0"
 
