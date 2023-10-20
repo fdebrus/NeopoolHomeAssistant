@@ -16,7 +16,7 @@ WIP, Currently tested with Hayward Aquarite+
 
 Install and configure the Neopool for Tasmota, how to https://tasmota.github.io/docs/NeoPool/
 
-Configure MQTT to connect the Tasmota module to HomeAssistant.
+Configure MQTT to connect the Tasmota module to HomeAssistant. Enable "setoption4 1" in Tasmota Console
 
 ![image](https://github.com/fdebrus/NeopoolHomeAssistant/assets/33791533/5b1388a1-e8fa-41fa-bf44-a80831af3bb0)
 
