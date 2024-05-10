@@ -1,5 +1,9 @@
 # NeopoolHomeAssistant
 
+# This repository will be archived. 
+# Cloud free version - check https://github.com/alexdelprete/HA-NeoPool-MQTT
+# Cloud version - need Wifi connectivity module for the pool - check https://github.com/fdebrus/hayward-ha
+
 WIP, Currently tested with Hayward Aquarite+ 
 
 1- The helpers in homeassistant. Those are used to set values for pH, RedOX, ... (see configuration.yaml)
